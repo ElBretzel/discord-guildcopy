@@ -33,9 +33,9 @@ The bot is not hosted. You need to selfhost the bot.
 11. Launch 'main.py' in the console.
 12. Paste your bot token in the console.
 13. To clone your guild, enter §copy <YourGuildId> (without the <>)
-13. Keep your computer fully awake during the whole copy process.
-14. Don't close the bot if you wan't to automaticly set roles to newcomers.
-14 bis. If you want to run the bot permanently, you need to purchase a VPS or never turn off your computer.
+14. Keep your computer fully awake during the whole copy process.
+15. Don't close the bot if you wan't to automaticly set roles to newcomers.
+15 bis. If you want to run the bot permanently, you need to purchase a VPS or never turn off your computer.
 
 ## :computer: Compatibility
 Works on Windows 10 with Python 3.9.
