@@ -1,0 +1,16 @@
+{
+    "french": {
+        "embed_title_created": "Créé le",
+        "embed_field_message": "Message",
+        "embed_field_sent": "envoyé par :",
+        "embed_footer_edited": "Message édité.",
+        "embed_description_files": "Un ou plusieurs fichiers sont liés au message"
+    },
+    "english": {
+        "embed_title_created": "Created on",
+        "embed_field_message": "Message",
+        "embed_field_sent": "Sent by :",
+        "embed_footer_edited": "Message edited.",
+        "embed_description_files": "One or more files are linked to the message"
+    }
+}

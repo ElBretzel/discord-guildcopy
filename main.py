@@ -8,6 +8,10 @@ from discord.ext import commands
 from database import DBManager
 from const import *
 
+if not os.path.exists(KEY_DIRECTORY):
+    with open(KEY_DIRECTORY, 'w') as w:
+        w.write(input("Your discord bot key: "))
+
 with open(KEY_DIRECTORY, 'r') as f:
     key = f.read()
 
@@ -42,7 +46,9 @@ class Bot(commands.Bot):
         self.run(self.token)
 
     async def on_ready(self):
-        print(f"Bot ready!")
+        print(f"Bot is ready!")
+        print(f"Prefix is {PREFIX}")
+        print(f"To show the list of commands, type {PREFIX}help")
 
 if __name__ == '__main__':
     bot = Bot(command_prefix = PREFIX, token = key, intents = default_intents)

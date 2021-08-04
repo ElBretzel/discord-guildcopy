@@ -1,9 +1,8 @@
 import discord
-from discord import user
-from discord import message
 
 from database import DBManager
 from utils.message_embed import CreateEmbed
+from const import MESSAGE_LIMIT, PREFIX
 
 class GuildAnalysis:
     def __init__(self, bot) -> None:
@@ -200,43 +199,62 @@ class GuildAnalysis:
 
     async def sync_message(self, textchannels):
         for channel in self.target_guild.text_channels:
-            print(channel)
-            messages = await channel.history(limit=None).flatten()
+            messages = await channel.history(limit=MESSAGE_LIMIT).flatten()
             messages.reverse()
+            print(f"Writing {channel} messages...")
+            counter = 0
             for message in messages:
+                counter += 1
                 channel_id = message.channel.id
                 send_channel = textchannels.get(channel_id)
                 await CreateEmbed().send_message(send_channel, message)
 
+                if counter % 150 == 0:
+                    print(f"Still writing messages in {channel}.")
+
         
 
-    async def start_analyse(self, receive_guild, target_guild, owner):
+    async def start_analyse(self, receive_guild, target_guild, ctx):
         features = target_guild.features
+        print("Creating a guild.")
         receive_guild = await self.bot.create_guild(
             name=target_guild.name,
             region=target_guild.region,
             icon=await target_guild.icon_url.read() if "ANIMATED_ICON" in features else await target_guild.icon_url_as(static_format="webp").read()
         )
+        print(f"If something goes wrong, please type: {PREFIX}delete {receive_guild.id}")
 
-        print(receive_guild, receive_guild.id)
+        await ctx.send("Creating the guild, please wait until the bot send you an invite link.\nPlease check your console in case an error occured during the process.\nIt will take a while, please wait...")
+        await ctx.send(F"If something goes wrong, please type: {PREFIX}delete {receive_guild.id}\nIf the process takes too much time, please set a limit in the file const.py after the variable MESSAGE_LIMIT (default: None : there is no limit) (eg: MESSAGE_LIMIT = 2000).")
 
         self.target_guild = target_guild
         self.receive_guild = receive_guild
-
         DBManager().add_guild(self.receive_guild)
+        print("Creating roles.")
         roles = await self.role_analyse()
-        await self.member_analyse(roles, owner)
+        print("Adding members to the database")
+        await self.member_analyse(roles, ctx.author)
+        print("Creating categories channels.")
         categories = await self.category_analyse(roles)
+        print("Creating text channels.")
         textchannels = await self.text_analyse(roles, categories)
+        print("Creating voice channels.")
         voicechannels = await self.voice_analyse(roles, categories)
+        print("Creating emojis.")
         await self.emoji_analyse(roles)
+        print("Adding ban members.")
         await self.sync_ban()
+        print("Editing guild configurations.")
         await self.sync_guild(voicechannels, textchannels, categories)
-
-        invite = await self.receive_guild.text_channels[0].create_invite(reason="Bot deepcopy")
-        await owner.send(invite)
-
+        print("Writing the messages.")
         await self.sync_message(textchannels)
+        print("Creating an invite")
+        invite = await self.receive_guild.text_channels[0].create_invite(reason="Bot deepcopy")
+        await ctx.author.send(invite)
+        print("Done!")
+        await ctx.send("All is done! Please enter the guild.")
+        await ctx.send(f"If the bot don't grant you the guild ownership, please write {PREFIX}admin {ctx.author.id}.")
+        await ctx.send(f"If the bot don't automaticly give roles to newcoming members, please write {PREFIX}debug <member.id or member mention> (without the <>).")
 
 
 # TODO integrations
