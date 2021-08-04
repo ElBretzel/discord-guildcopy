@@ -7,15 +7,15 @@ The bot is not hosted. You need to selfhost the bot.
 ## :memo: Features
 * 1.0
 	* Clone every channels and their permissions.
-  * Clone every roles and their permissions
+  	* Clone every roles and their permissions
 	* Clone every emojis.
 	* Clone every bans.
 	* Clone every messages and attachments.
 	* Clone guild configuration.
 	* Create a new fresh guild after the copy is done.
-  * Automaticly add the user who start the clonage owner of the backup guild.
-  * Automaticly sync roles and channels permissions when a member join.
-  * And much more...
+  	* Automaticly add the user who start the clonage owner of the backup guild.
+  	* Automaticly sync roles and channels permissions when a member join.
+  	* And much more...
 	
 ## :mag_right: Installation
 
